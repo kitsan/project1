@@ -8,6 +8,23 @@ import chainer.functions as F
 from chainer import Sequential
 import matplotlib.pyplot as plt
 
+class Net(chainer.Chain):
+
+    def __init__(self, n_in=4, n_hidden=3, n_out=3):
+        super().__init__()
+        with self.init_scope():
+            self.l1 = L.Linear(n_in, n_hidden)
+            self.l2 = L.Linear(n_hidden, n_hidden)
+            self.l3 = L.Linear(n_hidden, n_out)
+
+    def forward(self, x):
+        h = F.relu(self.l1(x))
+        h = F.relu(self.l2(h))
+        h = self.l3(h)
+
+        return h
+
+
 # Iris データセットの読み込み
 x, t = load_iris(return_X_y=True)
 x = x.astype('float32')
@@ -20,11 +37,7 @@ n_input = 4
 n_hidden = 6
 n_output = 3
 
-loaded_net = Sequential(
-    L.Linear(n_input, n_hidden), F.relu,
-    L.Linear(n_hidden, n_hidden), F.relu,
-    L.Linear(n_hidden, n_output)
-)
+loaded_net = Net(n_hidden=6)
 
 chainer.serializers.load_npz('my_iris.net', loaded_net)
 
