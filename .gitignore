@@ -20,3 +20,4 @@ $ cat .idea/.gitignore
 
 !/templateLanguages.xml
 !/vcs.xml
+.idea/project1.iml
